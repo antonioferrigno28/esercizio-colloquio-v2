@@ -5,7 +5,7 @@ Questa repository contiene il frontend sviluppato con Vite + React e un piccol
 Prerequisiti
 
 - Node.js ≥ 18.x
-- XAMPP - 8.x (PHP 8 + MySQL 8)
+- XAMPP - 8.x (PHP 7 + MySQL 8)
 
 ## Clona il progetto
 

@@ -164,293 +164,283 @@ export default function HomePage() {
         </div>
       )}
 
-      <div className="container py-2">
-        <h1 className="mb-3 text-primary-emphasis fw-bold ">
-          Catalogo Prodotti
-        </h1>
+      <h1 className="mb-3 text-primary-emphasis fw-bold ">Catalogo Prodotti</h1>
 
-        <div className="row g-4">
-          {products.map((product) => (
-            <div key={product.id} className="col-md-4">
-              <div className="card product-card h-100 border-0 shadow-sm">
-                <div className="product-img-wrapper">
-                  <img
-                    src={
-                      product.image ||
-                      "https://www.horizonplant.com/wp-content/uploads/2017/05/placeholder-400x400.png"
-                    }
-                    alt={product.name}
-                    className="card-img-top product-img"
-                  />
-                </div>
-                <div className="card-body d-flex flex-column">
-                  <h5 className="card-title fw-semibold">{product.name}</h5>
-                  <p className="card-text fs-6 text-dark fw-bold">
-                    €{Number(product.price).toFixed(2)}
-                  </p>
-                  <span
-                    className={
-                      "badge bg-light mb-3 border " +
-                      (product.quantity <= 0 ? "text-danger" : "text-dark")
-                    }
-                  >
-                    {product.quantity > 0
-                      ? product.quantity
-                      : "Non disponibile"}
-                  </span>
-                  <button
-                    className={
-                      "btn mt-auto fw-semibold " +
-                      (product.quantity <= 0
-                        ? "btn-danger text-white"
-                        : "btn-warning text-dark")
-                    }
-                    disabled={product.quantity === 0}
-                    onClick={() => addToCart(product, 1)}
-                  >
-                    🛒 Aggiungi al carrello
-                  </button>
-                </div>
-              </div>
-            </div>
-          ))}
-        </div>
-
-        <h1 className="mt-5 mb-3 text-primary-emphasis fw-bold border-bottom pb-2">
-          Carrello
-        </h1>
-        <div className="row">
-          {cart.map((product) => (
-            <div key={product.id} className="col-12 mb-3">
-              <div className="d-flex border rounded shadow-sm p-3 align-items-center gap-3 flex-wrap">
+      <div className="row g-4">
+        {products.map((product) => (
+          <div key={product.id} className="col-md-4">
+            <div className="card product-card h-100 border-0 shadow-sm">
+              <div className="product-img-wrapper">
                 <img
                   src={
                     product.image ||
                     "https://www.horizonplant.com/wp-content/uploads/2017/05/placeholder-400x400.png"
                   }
                   alt={product.name}
-                  className="img-thumbnail cart-img"
-                  style={{
-                    width: "100px",
-                    height: "100px",
-                    objectFit: "cover",
-                  }}
+                  className="card-img-top product-img"
                 />
-
-                <div className="flex-grow-1">
-                  <h5 className="mb-1 fw-semibold">{product.name}</h5>
-                  <p className="mb-1 text-muted small">
-                    Disponibilità immediata
-                  </p>
-                  <div className="d-flex align-items-center gap-3 flex-wrap">
-                    <span className="fw-bold text-dark fs-6">
-                      €{Number(product.price).toFixed(2)}
-                    </span>
-                    <div className="input-group input-group-sm w-auto">
-                      <span className="input-group-text">Qty</span>
-                      <input
-                        type="number"
-                        className="form-control"
-                        value={product.quantity}
-                        min={1}
-                        max={product.initialQuantity}
-                        onChange={(e) =>
-                          addToCart(
-                            product,
-                            parseInt(e.target.value) - product.quantity
-                          )
-                        }
-                      />
-                    </div>
-                    <button
-                      className="btn btn-outline-danger btn-sm"
-                      onClick={() => removeFromCart(product.id)}
-                    >
-                      Rimuovi
-                    </button>
-                  </div>
-                </div>
-
-                <div className="text-end">
-                  <p className="text-muted fst-italic mb-1">
-                    Prezzo al pezzo: €{product.price}
-                  </p>
-                  <p className="fw-semibold mb-0">
-                    Subtotale: €{(product.price * product.quantity).toFixed(2)}
-                  </p>
-                </div>
               </div>
-            </div>
-          ))}
-        </div>
-
-        <h3 className="mt-1">
-          Totale ordine {isDiscounted ? "con il 10% di sconto" : ""}:{" "}
-          <span className={"text-success"}>€{getTotalWithDiscount()}</span>
-        </h3>
-
-        <div className="d-flex justify-content-between mt-4">
-          <button
-            type="button"
-            className="btn btn-success btn-animation btn-green fw-semibold"
-            data-bs-toggle="modal"
-            data-bs-target="#orderModal"
-            disabled={cart.length === 0}
-          >
-            Conferma Ordine
-          </button>
-          <button
-            className="btn btn-danger btn-animation btn-red fw-semibold"
-            data-bs-toggle="modal"
-            data-bs-target="#clearCartModal"
-            disabled={cart.length === 0}
-          >
-            Svuota carrello
-          </button>
-        </div>
-
-        {/* Modale di conferma ordine */}
-        <div
-          className="modal fade"
-          id="orderModal"
-          data-bs-backdrop="static"
-          data-bs-keyboard="false"
-          tabIndex="-1"
-          aria-labelledby="staticBackdropLabel"
-          aria-hidden="true"
-        >
-          <div className="modal-dialog modal-dialog-centered">
-            <div className="modal-content">
-              <div className="modal-header">
-                <h5 className="modal-title fw-semibold" id="orderModalLabel">
-                  Conferma Ordine
-                </h5>
-                <button
-                  type="button"
-                  className="btn-close"
-                  data-bs-dismiss="modal"
-                  aria-label="Close"
-                ></button>
-              </div>
-              <div className="modal-body">
-                <p>Sei sicuro di voler confermare l'ordine?</p>
-                <p className="fw-semibold">
-                  Totale{isDiscounted ? " con il 10% di sconto" : ""}: €
-                  {getTotalWithDiscount()}
+              <div className="card-body d-flex flex-column">
+                <h5 className="card-title fw-semibold">{product.name}</h5>
+                <p className="card-text fs-6 text-dark fw-bold">
+                  €{Number(product.price).toFixed(2)}
                 </p>
-              </div>
-              <div className="modal-footer">
-                <button
-                  className="btn btn-secondary btn-animation btn-grey fw-semibold"
-                  data-bs-dismiss="modal"
+                <span
+                  className={
+                    "badge bg-light mb-3 border " +
+                    (product.quantity <= 0 ? "text-danger" : "text-dark")
+                  }
                 >
-                  Annulla
-                </button>
+                  {product.quantity > 0 ? product.quantity : "Non disponibile"}
+                </span>
                 <button
-                  className="btn btn-success btn-animation btn-green fw-semibold"
-                  data-bs-dismiss="modal"
-                  onClick={() => {
-                    handleOrder(); // Esegui la funzione di invio ordine
-                  }}
+                  className={
+                    "btn mt-auto fw-semibold " +
+                    (product.quantity <= 0
+                      ? "btn-danger text-white"
+                      : "btn-warning text-dark")
+                  }
+                  disabled={product.quantity === 0}
+                  onClick={() => addToCart(product, 1)}
                 >
-                  Conferma
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* Modale di conferma svuotamento carrello */}
-
-        <div
-          className="modal fade"
-          id="clearCartModal"
-          data-bs-backdrop="static"
-          data-bs-keyboard="false"
-          tabIndex="-1"
-          aria-labelledby="staticBackdropLabel"
-          aria-hidden="true"
-        >
-          <div className="modal-dialog modal-dialog-centered">
-            <div className="modal-content">
-              <div className="modal-header">
-                <h5 className="modal-title fw-semibold">
-                  Conferma Svuotamento Carrello
-                </h5>
-                <button
-                  type="button"
-                  className="btn-close"
-                  data-bs-dismiss="modal"
-                  aria-label="Close"
-                ></button>
-              </div>
-              <div className="modal-body">
-                <p>Sei sicuro di voler svuotare il carrello?</p>
-              </div>
-              <div className="modal-footer">
-                <button
-                  className="btn btn-secondary btn-animation btn-grey fw-semibold"
-                  data-bs-dismiss="modal"
-                >
-                  Annulla
-                </button>
-                <button
-                  className="btn btn-danger btn-animation btn-red fw-semibold"
-                  data-bs-dismiss="modal"
-                  onClick={() => {
-                    setCart([]);
-                    reloadProducts();
-                    setDiscounted(false);
-                  }}
-                >
-                  Svuota
+                  🛒 Aggiungi al carrello
                 </button>
               </div>
             </div>
           </div>
-        </div>
+        ))}
+      </div>
 
-        {/* Modale di errore ordine */}
+      <h1 className="mt-5 mb-3 text-primary-emphasis fw-bold border-bottom pb-2">
+        Carrello
+      </h1>
+      <div className="row">
+        {cart.map((product) => (
+          <div key={product.id} className="col-12 mb-3">
+            <div className="d-flex border rounded shadow-sm p-3 align-items-center gap-3 flex-wrap">
+              <img
+                src={
+                  product.image ||
+                  "https://www.horizonplant.com/wp-content/uploads/2017/05/placeholder-400x400.png"
+                }
+                alt={product.name}
+                className="img-thumbnail cart-img"
+                style={{
+                  width: "100px",
+                  height: "100px",
+                  objectFit: "cover",
+                }}
+              />
 
-        {showErrorModal && (
-          <div
-            className="modal fade"
-            id="errorModal"
-            data-bs-backdrop="static"
-            data-bs-keyboard="false"
-            tabIndex="-1"
-            aria-labelledby="staticBackdropLabel"
-            aria-hidden="true"
-          >
-            <div className="modal-dialog modal-dialog-centered">
-              <div className="modal-content">
-                <div className="modal-header">
-                  <h5 className="modal-title fw-semibold">
-                    Errore nell'Ordine
-                  </h5>
+              <div className="flex-grow-1">
+                <h5 className="mb-1 fw-semibold">{product.name}</h5>
+                <p className="mb-1 text-muted small">Disponibilità immediata</p>
+                <div className="d-flex align-items-center gap-3 flex-wrap">
+                  <span className="fw-bold text-dark fs-6">
+                    €{Number(product.price).toFixed(2)}
+                  </span>
+                  <div className="input-group input-group-sm w-auto">
+                    <span className="input-group-text">Qty</span>
+                    <input
+                      type="number"
+                      className="form-control"
+                      value={product.quantity}
+                      min={1}
+                      max={product.initialQuantity}
+                      onChange={(e) =>
+                        addToCart(
+                          product,
+                          parseInt(e.target.value) - product.quantity
+                        )
+                      }
+                    />
+                  </div>
                   <button
-                    type="button"
-                    className="btn-close"
-                    data-bs-dismiss="modal"
-                    aria-label="Close"
-                  ></button>
-                </div>
-                <div className="modal-body">
-                  <p>C'è stato un errore nell'invio dell'ordine al server</p>
-                </div>
-                <div className="modal-footer">
-                  <button
-                    className="btn btn-danger btn-animation btn-red fw-semibold"
-                    data-bs-dismiss="modal"
+                    className="btn btn-outline-danger btn-sm"
+                    onClick={() => removeFromCart(product.id)}
                   >
-                    Capisco
+                    Rimuovi
                   </button>
                 </div>
               </div>
+
+              <div className="text-end">
+                <p className="text-muted fst-italic mb-1">
+                  Prezzo al pezzo: €{product.price}
+                </p>
+                <p className="fw-semibold mb-0">
+                  Subtotale: €{(product.price * product.quantity).toFixed(2)}
+                </p>
+              </div>
             </div>
           </div>
-        )}
+        ))}
       </div>
+
+      <h3 className="mt-1">
+        Totale ordine {isDiscounted ? "con il 10% di sconto" : ""}:{" "}
+        <span className={"text-success"}>€{getTotalWithDiscount()}</span>
+      </h3>
+
+      <div className="d-flex justify-content-between mt-4">
+        <button
+          type="button"
+          className="btn btn-success btn-animation btn-green fw-semibold"
+          data-bs-toggle="modal"
+          data-bs-target="#orderModal"
+          disabled={cart.length === 0}
+        >
+          Conferma Ordine
+        </button>
+        <button
+          className="btn btn-danger btn-animation btn-red fw-semibold"
+          data-bs-toggle="modal"
+          data-bs-target="#clearCartModal"
+          disabled={cart.length === 0}
+        >
+          Svuota carrello
+        </button>
+      </div>
+
+      {/* Modale di conferma ordine */}
+      <div
+        className="modal fade"
+        id="orderModal"
+        data-bs-backdrop="static"
+        data-bs-keyboard="false"
+        tabIndex="-1"
+        aria-labelledby="staticBackdropLabel"
+        aria-hidden="true"
+      >
+        <div className="modal-dialog modal-dialog-centered">
+          <div className="modal-content">
+            <div className="modal-header">
+              <h5 className="modal-title fw-semibold" id="orderModalLabel">
+                Conferma Ordine
+              </h5>
+              <button
+                type="button"
+                className="btn-close"
+                data-bs-dismiss="modal"
+                aria-label="Close"
+              ></button>
+            </div>
+            <div className="modal-body">
+              <p>Sei sicuro di voler confermare l'ordine?</p>
+              <p className="fw-semibold">
+                Totale{isDiscounted ? " con il 10% di sconto" : ""}: €
+                {getTotalWithDiscount()}
+              </p>
+            </div>
+            <div className="modal-footer">
+              <button
+                className="btn btn-secondary btn-animation btn-grey fw-semibold"
+                data-bs-dismiss="modal"
+              >
+                Annulla
+              </button>
+              <button
+                className="btn btn-success btn-animation btn-green fw-semibold"
+                data-bs-dismiss="modal"
+                onClick={() => {
+                  handleOrder(); // Esegui la funzione di invio ordine
+                }}
+              >
+                Conferma
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Modale di conferma svuotamento carrello */}
+
+      <div
+        className="modal fade"
+        id="clearCartModal"
+        data-bs-backdrop="static"
+        data-bs-keyboard="false"
+        tabIndex="-1"
+        aria-labelledby="staticBackdropLabel"
+        aria-hidden="true"
+      >
+        <div className="modal-dialog modal-dialog-centered">
+          <div className="modal-content">
+            <div className="modal-header">
+              <h5 className="modal-title fw-semibold">
+                Conferma Svuotamento Carrello
+              </h5>
+              <button
+                type="button"
+                className="btn-close"
+                data-bs-dismiss="modal"
+                aria-label="Close"
+              ></button>
+            </div>
+            <div className="modal-body">
+              <p>Sei sicuro di voler svuotare il carrello?</p>
+            </div>
+            <div className="modal-footer">
+              <button
+                className="btn btn-secondary btn-animation btn-grey fw-semibold"
+                data-bs-dismiss="modal"
+              >
+                Annulla
+              </button>
+              <button
+                className="btn btn-danger btn-animation btn-red fw-semibold"
+                data-bs-dismiss="modal"
+                onClick={() => {
+                  setCart([]);
+                  reloadProducts();
+                  setDiscounted(false);
+                }}
+              >
+                Svuota
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Modale di errore ordine */}
+
+      {showErrorModal && (
+        <div
+          className="modal fade"
+          id="errorModal"
+          data-bs-backdrop="static"
+          data-bs-keyboard="false"
+          tabIndex="-1"
+          aria-labelledby="staticBackdropLabel"
+          aria-hidden="true"
+        >
+          <div className="modal-dialog modal-dialog-centered">
+            <div className="modal-content">
+              <div className="modal-header">
+                <h5 className="modal-title fw-semibold">Errore nell'Ordine</h5>
+                <button
+                  type="button"
+                  className="btn-close"
+                  data-bs-dismiss="modal"
+                  aria-label="Close"
+                ></button>
+              </div>
+              <div className="modal-body">
+                <p>C'è stato un errore nell'invio dell'ordine al server</p>
+              </div>
+              <div className="modal-footer">
+                <button
+                  className="btn btn-danger btn-animation btn-red fw-semibold"
+                  data-bs-dismiss="modal"
+                >
+                  Capisco
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </>
   );
 }

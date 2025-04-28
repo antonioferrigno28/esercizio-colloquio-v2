@@ -57,3 +57,18 @@ body {
 .btn-grey:hover {
   background-color: #6c757d;
 }
+
+.card-text-wrapper {
+  max-height: 150px;
+  overflow-y: auto;
+}
+
+footer {
+  position: fixed;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+
+  text-align: center;
+  height: 80px;
+}

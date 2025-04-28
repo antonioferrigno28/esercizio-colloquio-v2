@@ -15,7 +15,7 @@ git clone https://github.com/antonioferrigno28/esercizio-colloquio-v2.git
 
 - Installa XAMPP ed avvia Apache + MySQL.
 
-- Copia i file backend/db.php, backend/get-products.php e backend/save-order.php in una cartella di tua scelta all’interno di htdocs/ ad esempio: C:\xampp\htdocs\esercizio-colloquio\
+- Copia i file backend/db.php, backend/get-products.php, backend/get-orders.php e backend/save-order.php in una cartella di tua scelta all’interno di htdocs/ ad esempio: C:\xampp\htdocs\esercizio-colloquio\
 
 - Importa il database MySQL dal file db.sql che trovi nella cartella backend/
 
